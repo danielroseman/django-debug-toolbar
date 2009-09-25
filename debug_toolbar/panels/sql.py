@@ -21,8 +21,10 @@ socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
-SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
-                            .get('SQL_WARNING_THRESHOLD', 500)
+toolbar_settings = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
+SQL_WARNING_THRESHOLD = toolbar_settings.get('SQL_WARNING_THRESHOLD', 500)
+HIDE_DJANGO_SQL = toolbar_settings.get('HIDE_DJANGO_SQL', True)
+TRACEBACK_ROOT = toolbar_settings.get('TRACEBACK_ROOT', '')
 
 def tidy_stacktrace(strace):
     """
@@ -34,13 +36,13 @@ def tidy_stacktrace(strace):
     trace = []
     for s in strace[:-1]:
         s_path = os.path.realpath(s[0])
-        if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True) \
-            and django_path in s_path and not 'django/contrib' in s_path:
+        if HIDE_DJANGO_SQL and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if socketserver_path in s_path:
             continue
-        trace.append((s[0], s[1], s[2], s[3]))
+        trace.append((s[0].replace(TRACEBACK_ROOT, ''), s[1], s[2], s[3]))
     return trace
+
 
 class DatabaseStatTracker(util.CursorDebugWrapper):
     """
