@@ -109,8 +109,13 @@ class SQLDebugPanel(DebugPanel):
 
     def content(self):
         width_ratio_tally = 0
+        most_executed = {}
+        
         for query in self._queries:
             query['sql'] = reformat_sql(query['sql'])
+            query['last_stacktrace'] = query['stacktrace'][-1]
+            raw_query = reformat_sql(query['raw_sql'])
+            most_executed.setdefault(raw_query, []).append(query)
             try:
                 query['width_ratio'] = (query['duration'] / self._sql_time) * 100
             except ZeroDivisionError:
@@ -118,10 +123,15 @@ class SQLDebugPanel(DebugPanel):
             query['start_offset'] = width_ratio_tally
             width_ratio_tally += query['width_ratio']
 
+        most_executed = most_executed.items()
+        most_executed.sort(key = lambda v: len(v[1]), reverse=True)
+        most_executed = most_executed[:10]
+
         context = {
             'queries': self._queries,
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
+            'most_executed': most_executed,
         }
         return render_to_string('debug_toolbar/panels/sql.html', context)
 
