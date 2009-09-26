@@ -13,7 +13,7 @@
 	</thead>
 	<tbody>
 		{% for query in queries %}
-			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}" id={{ query.hash }}>
 				<td>{{ query.duration|floatformat:"2" }}</td>
 				<td>
 				{% if query.params %}
@@ -68,7 +68,7 @@
             executed <strong> {{ pair.1|length }} times</strong>
             <ul style="padding-left:1em;">
             {% for q in pair.1 %}
-                <li><strong>{{ q.params }}</strong> {{ q.duration|floatformat:"2" }}s - {{ q.last_stacktrace.0 }} line {{ q.last_stacktrace.1 }} in {{ q.last_stacktrace.2 }}: {{ q.last_stacktrace.3 }}</li>
+                <li><strong>{{ q.params }}</strong> {{ q.duration|floatformat:"2" }}s - {{ q.last_stacktrace.0 }} line {{ q.last_stacktrace.1 }} in {{ q.last_stacktrace.2 }}: <a href="#{{ q.hash }}">{{ q.last_stacktrace.3 }}</a></li>
             {% endfor %}
             </ul>
         </td>
