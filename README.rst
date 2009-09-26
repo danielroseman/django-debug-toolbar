@@ -109,6 +109,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
      off is useful when you have large template contexts, or you have template
      contexts with lazy datastructures that you don't want to be evaluated.
 
+   * `STACKTRACE_PATH`: A string representing a filepath that is removed from 
+     the start of paths in stacktraces, for readability.
+
    Example configuration::
 
 	def custom_show_toolbar(request):

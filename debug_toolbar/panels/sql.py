@@ -24,7 +24,7 @@ socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 toolbar_settings = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
 SQL_WARNING_THRESHOLD = toolbar_settings.get('SQL_WARNING_THRESHOLD', 500)
 HIDE_DJANGO_SQL = toolbar_settings.get('HIDE_DJANGO_SQL', True)
-TRACEBACK_ROOT = toolbar_settings.get('TRACEBACK_ROOT', '')
+STACKTRACE_ROOT = toolbar_settings.get('STACKTRACE_ROOT', '')
 
 def tidy_stacktrace(strace):
     """
@@ -40,7 +40,7 @@ def tidy_stacktrace(strace):
             continue
         if socketserver_path in s_path:
             continue
-        trace.append((s[0].replace(TRACEBACK_ROOT, ''), s[1], s[2], s[3]))
+        trace.append((s[0].replace(STACKTRACE_ROOT, ''), s[1], s[2], s[3]))
     return trace
 
 
