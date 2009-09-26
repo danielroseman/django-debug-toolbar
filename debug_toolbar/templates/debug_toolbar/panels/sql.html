@@ -62,16 +62,17 @@
 <p id="most-executed" style="margin-top:20px"><strong>{{ most_executed|length }} most frequently executed queries:</strong></p>
 <table>
     {% for pair in most_executed %}
-    <tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}"><td>
-        <li>
+    <tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+        <td>
             {{ pair.0|safe }}<br/>
-            executed <strong style="color: red"> {{ pair.1|length }} times</strong>
-            <ul style="margin-left: 1em">
+            executed <strong> {{ pair.1|length }} times</strong>
+            <ul style="padding-left:1em;">
             {% for q in pair.1 %}
-                <li><strong>{{ q.params }}</strong> {{ q.duration|floatformat:"2" }} s - {{ q.last_stacktrace.0 }} line {{ q.last_stacktrace.1 }} in {{ q.last_stacktrace.2 }}: {{ q.last_stacktrace.3 }}</li>
-            {% endfor %}</ul>
-        </li>
-    </td></tr>
+                <li><strong>{{ q.params }}</strong> {{ q.duration|floatformat:"2" }}s - {{ q.last_stacktrace.0 }} line {{ q.last_stacktrace.1 }} in {{ q.last_stacktrace.2 }}: {{ q.last_stacktrace.3 }}</li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
     {% endfor %}
 </table>
 {% endif %}
