@@ -1,16 +1,17 @@
-# SOME DESCRIPTIVE TITLE.
+# Django Debug Toolbar in French.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# David Paccoud, 2009.
+#
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Django Debug Toolbar 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-18 08:06-0800\n"
-"PO-Revision-Date: 2009-08-24 23:08-0600\n"
-"Last-Translator: Alex <alex.gaynor@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-10-14 22:53+0200\n"
+"Last-Translator: David Paccoud <dpaccoud@gmail.com>\n"
+"Language-Team: French <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,54 +23,55 @@ msgstr ""
 
 #: panels/cache.py:95
 msgid "Cache Usage"
-msgstr ""
+msgstr "Usage du cache"
 
 #: panels/headers.py:36 panels/headers.py:39
 msgid "HTTP Headers"
-msgstr ""
+msgstr "En-têtes HTTP"
 
 #: panels/logger.py:56
 msgid "Logging"
-msgstr "רישום יומן"
+msgstr "Journaux"
 
 #: panels/logger.py:63
 #, fuzzy
 msgid "Log Messages"
-msgstr "הודעה"
+msgstr "Message"
 
 #: panels/request_vars.py:13 panels/request_vars.py:16
 msgid "Request Vars"
-msgstr ""
+msgstr "Variables de requête"
 
 #: panels/settings_vars.py:16
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #: panels/settings_vars.py:19
 #, python-format
 msgid "Settings from <code>%s</code>"
-msgstr ""
+msgstr "Paramètres de <code>%s</code>"
 
 #: panels/signals.py:39 panels/signals.py:42
 msgid "Signals"
-msgstr "סימנים"
+msgstr "Signaux"
 
 #: panels/sql.py:146
 msgid "SQL"
-msgstr ""
+msgstr "SQL"
 
 #: panels/sql.py:160
+#, fuzzy
 msgid "SQL Queries"
-msgstr ""
+msgstr "Requêtes SQL"
 
 #: panels/template.py:47
 msgid "Templates"
-msgstr "תבניות"
+msgstr "Gabarits"
 
 #: panels/template.py:52
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
-msgstr ""
+msgstr "Gabarits (%(num_templates)s affichés)"
 
 #: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:7
@@ -78,58 +80,60 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
-msgstr "זמן"
+msgstr "Temps"
 
 #: panels/timer.py:47
+#, fuzzy
 msgid "Resource Usage"
-msgstr ""
+msgstr "Usage des ressources"
 
 #: panels/timer.py:78
 msgid "User CPU time"
-msgstr ""
+msgstr "Temps CPU utilisateur"
 
 #: panels/timer.py:79
 msgid "System CPU time"
-msgstr ""
+msgstr "Temps CPU système"
 
 #: panels/timer.py:80
 #, fuzzy
 msgid "Total CPU time"
-msgstr "זמן"
+msgstr "Temps CPU Total"
 
 #: panels/timer.py:81
 msgid "Elapsed time"
-msgstr ""
+msgstr "Temps écoulé"
 
 #: panels/timer.py:82
+#, fuzzy
 msgid "Context switches"
-msgstr ""
+msgstr "Changements de contexte"
 
 #: panels/version.py:20 panels/version.py:29
 #, fuzzy
 msgid "Versions"
-msgstr "ג 'נגו גירסה"
+msgstr "Versions"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Hide Toolbar"
-msgstr ""
+msgstr "Masquer la barre"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Hide"
-msgstr "הסתיר"
+msgstr "Masquer"
 
 #: templates/debug_toolbar/base.html:48
 msgid "Show Toolbar"
-msgstr ""
+msgstr "Afficher la barre"
 
 #: templates/debug_toolbar/base.html:54
 msgid "Close"
-msgstr "סגור"
+msgstr "Fermer"
 
 #: templates/debug_toolbar/redirect.html:7
 #: templates/debug_toolbar/panels/logger.html:9
 msgid "Location"
-msgstr "מקום"
+msgstr "Emplacement"
 
 #: templates/debug_toolbar/redirect.html:9
 msgid ""
@@ -139,42 +143,48 @@ msgid ""
 "<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
 "<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr ""
+"La barre de Debug Django a intercepté une redirection vers l'adresse ci-"
+"dessous afin de permettre la consultation des messages de debug.  Vous "
+"pouvez cliquer sur le lien ci-dessus pour continuer normalement avec la "
+"redirection.  Si vous voulez désactiver cette fonctionnalité, paramétrez la "
+"valeur de la clé <code>INTERCEPT_REDIRECTS</code> du dictionnaire "
+"<code>DEBUG_TOOLBAR_CONFIG</code> à <code>False</code>."
 
 #: templates/debug_toolbar/panels/cache.html:14
 msgid "Total Calls"
-msgstr ""
+msgstr "Nombre total d'appels"
 
 #: templates/debug_toolbar/panels/cache.html:16
 msgid "Total Time"
-msgstr "זמן"
+msgstr "Temps Total"
 
 #: templates/debug_toolbar/panels/cache.html:18
 msgid "Hits"
-msgstr "הצלחות"
+msgstr "Requêtes"
 
 #: templates/debug_toolbar/panels/cache.html:20
 msgid "Misses"
-msgstr ""
+msgstr "Ratés"
 
 #: templates/debug_toolbar/panels/cache.html:35
 msgid "Breakdown"
-msgstr ""
+msgstr "Cassé"
 
 #: templates/debug_toolbar/panels/cache.html:40
 msgid "Type"
-msgstr "סוג"
+msgstr "Type"
 
 #: templates/debug_toolbar/panels/cache.html:41
 msgid "Parameters"
-msgstr ""
+msgstr "Paramètres"
 
 #: templates/debug_toolbar/panels/cache.html:42
 msgid "Function"
-msgstr ""
+msgstr "Fonction"
 
 #: templates/debug_toolbar/panels/headers.html:5
 msgid "Key"
-msgstr "מפתח"
+msgstr "Clé"
 
 #: templates/debug_toolbar/panels/headers.html:6
 #: templates/debug_toolbar/panels/request_vars.html:37
@@ -184,27 +194,28 @@ msgstr "מפתח"
 #: templates/debug_toolbar/panels/settings_vars.html:6
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Value"
-msgstr "ערך"
+msgstr "Valeur"
 
 #: templates/debug_toolbar/panels/logger.html:6
 msgid "Level"
-msgstr "רמה"
+msgstr "Niveau"
 
 #: templates/debug_toolbar/panels/logger.html:8
 msgid "Message"
-msgstr "הודעה"
+msgstr "Message"
 
 #: templates/debug_toolbar/panels/logger.html:24
 msgid "No messages logged"
-msgstr "אין הודעות"
+msgstr "Aucun message dans le journal"
 
 #: templates/debug_toolbar/panels/request_vars.html:3
 msgid "View information"
 msgstr ""
 
 #: templates/debug_toolbar/panels/request_vars.html:7
+#, fuzzy
 msgid "View Function"
-msgstr ""
+msgstr "Fonction"
 
 #: templates/debug_toolbar/panels/request_vars.html:8
 msgid "args"
@@ -215,55 +226,51 @@ msgid "kwargs"
 msgstr ""
 
 #: templates/debug_toolbar/panels/request_vars.html:27
-#, fuzzy
 msgid "COOKIES Variables"
-msgstr "מזהה"
+msgstr "Variables des COOKIES"
 
 #: templates/debug_toolbar/panels/request_vars.html:36
 #: templates/debug_toolbar/panels/request_vars.html:62
 #: templates/debug_toolbar/panels/request_vars.html:84
 #: templates/debug_toolbar/panels/request_vars.html:106
 msgid "Variable"
-msgstr "מזהה"
+msgstr "Variable"
 
 #: templates/debug_toolbar/panels/request_vars.html:50
 msgid "No COOKIE data"
-msgstr "אין נתונים  לעוגיות"
+msgstr "Aucune donnée de COOKIE"
 
 #: templates/debug_toolbar/panels/request_vars.html:53
-#, fuzzy
 msgid "SESSION Variables"
-msgstr "מזהה"
+msgstr "Variables de SESSION"
 
 #: templates/debug_toolbar/panels/request_vars.html:76
 msgid "No SESSION data"
-msgstr "אין נתונים  להתחברות"
+msgstr "Aucune donnée de SESSION"
 
 #: templates/debug_toolbar/panels/request_vars.html:79
-#, fuzzy
 msgid "GET Variables"
-msgstr "מזהה"
+msgstr "Variables GET"
 
 #: templates/debug_toolbar/panels/request_vars.html:98
 msgid "No GET data"
-msgstr "שום דבר עבור GET"
+msgstr "Aucune donnée GET"
 
 #: templates/debug_toolbar/panels/request_vars.html:101
-#, fuzzy
 msgid "POST Variables"
-msgstr "מזהה"
+msgstr "Variables POST"
 
 #: templates/debug_toolbar/panels/request_vars.html:120
 msgid "No POST data"
-msgstr "שום דבר עבור POST"
+msgstr "Aucune donnée POST"
 
 #: templates/debug_toolbar/panels/settings_vars.html:5
 msgid "Setting"
-msgstr ""
+msgstr "Paramètre"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr "סימן"
+msgstr "Signal"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing Args"
@@ -271,102 +278,99 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
-msgstr ""
+msgstr "Receveurs"
 
 #: templates/debug_toolbar/panels/sql.html:6
 msgid "Action"
-msgstr "פעילות"
+msgstr "Action"
 
 #: templates/debug_toolbar/panels/sql.html:7
 msgid "Stacktrace"
-msgstr ""
+msgstr "Pile d'appel"
 
 #: templates/debug_toolbar/panels/sql.html:8
 msgid "Query"
-msgstr ""
+msgstr "Requête"
 
 #: templates/debug_toolbar/panels/sql.html:38
 msgid "Line"
-msgstr "שורה"
+msgstr "Ligne"
 
 #: templates/debug_toolbar/panels/sql.html:39
 msgid "Method"
-msgstr ""
+msgstr "Méthode"
 
 #: templates/debug_toolbar/panels/sql.html:40
 msgid "File"
-msgstr "קובץ"
+msgstr "Fichier"
 
 #: templates/debug_toolbar/panels/sql_explain.html:3
 #: templates/debug_toolbar/panels/sql_profile.html:3
 #: templates/debug_toolbar/panels/sql_select.html:3
 #: templates/debug_toolbar/panels/template_source.html:3
 msgid "Back"
-msgstr "חזרה"
+msgstr "Retour"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL Explained"
-msgstr ""
+msgstr "SQL Expliqué"
 
 #: templates/debug_toolbar/panels/sql_explain.html:9
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr "הסבר עבור SQL"
+msgstr "SQL Exécuté"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL Profiled"
-msgstr ""
+msgstr "SQL Profilé"
 
 #: templates/debug_toolbar/panels/sql_profile.html:35
 msgid "Error"
-msgstr "שגיאה"
+msgstr "Erreur"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL Selected"
-msgstr ""
+msgstr "SQL Sélectionné"
 
 #: templates/debug_toolbar/panels/sql_select.html:34
 msgid "Empty set"
-msgstr "תוצאות ריק"
+msgstr "Ensemble vide"
 
 #: templates/debug_toolbar/panels/template_source.html:4
-#, fuzzy
 msgid "Template Source"
-msgstr "תבנית"
+msgstr "Source du gabarit"
 
 #: templates/debug_toolbar/panels/templates.html:2
-#, fuzzy
 msgid "Template path"
-msgstr "תבנית"
+msgstr "Chemin du gabarit"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
-msgstr "תבנית"
+msgstr "Gabarit"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
 msgid "Toggle Context"
-msgstr ""
+msgstr "Afficher/Masquer le contexte"
 
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: templates/debug_toolbar/panels/templates.html:31
 msgid "Context processor"
-msgstr ""
+msgstr "Processeur de contexte"
 
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
-msgstr ""
+msgstr "Ressources"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Package"
-msgstr ""
+msgstr "Paquet"
 
 #: templates/debug_toolbar/panels/versions.html:7
-#, fuzzy
 msgid "Version"
-msgstr "ג 'נגו גירסה"
+msgstr "Version"

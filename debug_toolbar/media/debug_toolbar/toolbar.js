@@ -24,14 +24,14 @@ jQuery(function($j) {
 				}
 				return false;
 			});
-			$j('#djDebug a.close').click(function() {
+			$j('#djDebug a.djDebugClose').click(function() {
 				$j(document).trigger('close.djDebug');
 				$j('#djDebugToolbar li').removeClass('active');
 				return false;
 			});
 			$j('#djDebug a.remoteCall').click(function() {
 				$j('#djDebugWindow').load(this.href, {}, function() {
-					$j('#djDebugWindow a.back').click(function() {
+					$j('#djDebugWindow a.djDebugBack').click(function() {
 						$j(this).parent().parent().hide();
 						return false;
 					});
@@ -45,7 +45,7 @@ jQuery(function($j) {
 				return false;
 			});
 			$j('#djDebugSQLPanel a.djSQLShowStacktrace').click(function() {
-				$j.djDebug.toggle_content($j(this).parent().next());
+				$j.djDebug.toggle_content($j('.djSQLHideStacktraceDiv', $j(this).parents('tr')));
 				return false;
 			});
 			$j('#djHideToolBarButton').click(function() {

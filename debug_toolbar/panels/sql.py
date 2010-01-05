@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import sys
 import SocketServer
 import traceback
 
@@ -7,10 +8,13 @@ import django
 from django.conf import settings
 from django.db import connection
 from django.db.backends import util
+from django.views.debug import linebreak_iter
+from django.template import Node
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
+from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import sqlparse
@@ -43,6 +47,39 @@ def tidy_stacktrace(strace):
         trace.append((s[0].replace(STACKTRACE_ROOT, ''), s[1], s[2], s[3]))
     return trace
 
+def get_template_info(source, context_lines=3):
+    line = 0
+    upto = 0
+    source_lines = []
+    before = during = after = ""
+
+    origin, (start, end) = source
+    template_source = origin.reload()
+
+    for num, next in enumerate(linebreak_iter(template_source)):
+        if start >= upto and end <= next:
+            line = num
+            before = template_source[upto:start]
+            during = template_source[start:end]
+            after = template_source[end:next]
+        source_lines.append((num, template_source[upto:next]))
+        upto = next
+
+    top = max(1, line - context_lines)
+    bottom = min(len(source_lines), line + 1 + context_lines)
+
+    context = []
+    for num, content in source_lines[top:bottom]:
+        context.append({
+            'num': num,
+            'content': content,
+            'highlight': (num == line),
+        })
+
+    return {
+        'name': origin.name,
+        'context': context,
+    }
 
 class DatabaseStatTracker(util.CursorDebugWrapper):
     """
@@ -62,6 +99,21 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 _params = simplejson.dumps([force_unicode(x) for x in params])
             except TypeError:
                 pass # object not JSON serializable
+
+            template_info = None
+            cur_frame = sys._getframe().f_back
+            try:
+                while cur_frame is not None:
+                    if cur_frame.f_code.co_name == 'render':
+                        node = cur_frame.f_locals['self']
+                        if isinstance(node, Node):
+                            template_info = get_template_info(node.source)
+                            break
+                    cur_frame = cur_frame.f_back
+            except:
+                pass
+            del cur_frame
+
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
@@ -74,6 +126,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'stop_time': stop,
                 'is_slow': (duration > SQL_WARNING_THRESHOLD),
                 'is_select': sql.lower().strip().startswith('select'),
+                'template_info': template_info,
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
@@ -91,12 +144,13 @@ class SQLDebugPanel(DebugPanel):
         self._queries = []
 
     def nav_title(self):
-        return 'SQL'
+        return _('SQL')
 
     def nav_subtitle(self):
         self._queries = connection.queries[self._offset:]
         self._sql_time = sum([q['duration'] for q in self._queries])
         num_queries = len(self._queries)
+        # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
             num_queries,
             (num_queries == 1) and 'query' or 'queries',
@@ -104,7 +158,7 @@ class SQLDebugPanel(DebugPanel):
         )
 
     def title(self):
-        return 'SQL Queries'
+        return _('SQL Queries')
 
     def url(self):
         return ''

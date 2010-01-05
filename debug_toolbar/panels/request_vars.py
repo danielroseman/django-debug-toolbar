@@ -1,4 +1,5 @@
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 class RequestVarsDebugPanel(DebugPanel):
@@ -9,10 +10,10 @@ class RequestVarsDebugPanel(DebugPanel):
     has_content = True
 
     def nav_title(self):
-        return 'Request Vars'
+        return _('Request Vars')
 
     def title(self):
-        return 'Request Vars'
+        return _('Request Vars')
 
     def url(self):
         return ''
@@ -20,11 +21,19 @@ class RequestVarsDebugPanel(DebugPanel):
     def process_request(self, request):
         self.request = request
 
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        self.view_func = view_func
+        self.view_args = view_args
+        self.view_kwargs = view_kwargs
+
     def content(self):
         context = {
-            'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET.iterkeys()],
-            'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST.iterkeys()],
-            'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES.iterkeys()],
+            'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
+            'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
+            'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
+            'view_func': '%s.%s' % (self.view_func.__module__, self.view_func.__name__),
+            'view_args': self.view_args,
+            'view_kwargs': self.view_kwargs
         }
         if hasattr(self.request, 'session'):
             context['session'] = [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()]
