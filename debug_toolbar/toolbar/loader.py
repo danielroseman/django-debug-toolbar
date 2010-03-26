@@ -1,6 +1,7 @@
 """
 The main DebugToolbar class that loads and renders the Toolbar.
 """
+from django.conf import settings
 from django.template.loader import render_to_string
 
 class DebugToolbar(object):
@@ -8,8 +9,16 @@ class DebugToolbar(object):
     def __init__(self, request):
         self.request = request
         self.panels = []
+        base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {
             'INTERCEPT_REDIRECTS': True,
+            'MEDIA_URL': u'%s/__debug__/m/' % base_url
+        }
+        # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
+        self.config.update(getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}))
+        self.template_context = {
+            'BASE_URL': base_url, # for backwards compatibility
+            'DEBUG_TOOLBAR_MEDIA_URL': self.config.get('MEDIA_URL'),
         }
         # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
         self.default_panels = (
@@ -36,9 +45,6 @@ class DebugToolbar(object):
         # Check if settings has a DEBUG_TOOLBAR_PANELS, otherwise use default
         if hasattr(settings, 'DEBUG_TOOLBAR_PANELS'):
             self.default_panels = settings.DEBUG_TOOLBAR_PANELS
-        # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
-        if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
-            self.config.update(settings.DEBUG_TOOLBAR_CONFIG)
 
         for panel_path in self.default_panels:
             try:
@@ -56,9 +62,8 @@ class DebugToolbar(object):
                 raise exceptions.ImproperlyConfigured, 'Toolbar Panel module "%s" does not define a "%s" class' % (panel_module, panel_classname)
 
             try:
-                panel_instance = panel_class()
+                panel_instance = panel_class(context=self.template_context)
             except:
-                print panel_class
                 raise # Bubble up problem loading panel
 
             self.panels.append(panel_instance)
@@ -67,7 +72,7 @@ class DebugToolbar(object):
         """
         Renders the overall Toolbar with panels inside.
         """
-        return render_to_string('debug_toolbar/base.html', {
-            'panels': self.panels,
-            'BASE_URL': self.request.META.get('SCRIPT_NAME', ''),
-        })
+        context = self.template_context.copy()
+        context.update({ 'panels': self.panels, })
+
+        return render_to_string('debug_toolbar/base.html', context)

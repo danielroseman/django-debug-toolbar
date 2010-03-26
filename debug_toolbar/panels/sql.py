@@ -138,7 +138,8 @@ class SQLDebugPanel(DebugPanel):
     name = 'SQL'
     has_content = True
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
         self._offset = len(connection.queries)
         self._sql_time = 0
         self._queries = []
@@ -183,6 +184,7 @@ class SQLDebugPanel(DebugPanel):
         most_executed.sort(key = lambda v: len(v[1]), reverse=True)
         most_executed = most_executed[:10]
 
+        context = self.context.copy()
         context = {
             'queries': self._queries,
             'sql_time': self._sql_time,
@@ -205,7 +207,7 @@ class BoldKeywordFilter(sqlparse.filters.Filter):
             is_keyword = token_type in sqlparse.tokens.Keyword
             if is_keyword:
                 yield sqlparse.tokens.Text, '<strong>'
-            yield token_type, value
+            yield token_type, django.utils.html.escape(value)
             if is_keyword:
                 yield sqlparse.tokens.Text, '</strong>'
 

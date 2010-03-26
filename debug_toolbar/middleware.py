@@ -33,33 +33,44 @@ class DebugToolbarMiddleware(object):
     """
     def __init__(self):
         self.debug_toolbars = {}
-        self.original_urlconf = settings.ROOT_URLCONF
-        self.original_pattern = patterns('', ('', include(self.original_urlconf)),)
         self.override_url = True
 
         # Set method to use to decide to show toolbar
         self.show_toolbar = self._show_toolbar # default
+
+        # The tag to attach the toolbar to
+        self.tag= u'</body>'
+
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
             show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
                 'SHOW_TOOLBAR_CALLBACK', None)
             if show_toolbar_callback:
                 self.show_toolbar = show_toolbar_callback
 
+            tag = settings.DEBUG_TOOLBAR_CONFIG.get('TAG', None)
+            if tag:
+                self.tag = u'</' + tag + u'>'
+
     def _show_toolbar(self, request):
-        if not settings.DEBUG:
-            return False
-        if request.is_ajax() and not \
-            request.path.startswith(os.path.join('/', debug_toolbar.urls._PREFIX)):
-            # Allow ajax requests from the debug toolbar
-            return False 
-        if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
+        if x_forwarded_for:
+            remote_addr = x_forwarded_for.split(',')[0].strip()
+        else:
+            remote_addr = request.META.get('REMOTE_ADDR', None)
+        if not remote_addr in settings.INTERNAL_IPS \
+            or (request.is_ajax() and \
+                not debug_toolbar.urls._PREFIX in request.path) \
+                    or not settings.DEBUG:
             return False
         return True
 
     def process_request(self, request):
         if self.show_toolbar(request):
             if self.override_url:
-                debug_toolbar.urls.urlpatterns += self.original_pattern
+                original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
+                debug_toolbar.urls.urlpatterns += patterns('',
+                    ('', include(original_urlconf)),
+                )
                 self.override_url = False
             request.urlconf = 'debug_toolbar.urls'
 
@@ -87,6 +98,11 @@ class DebugToolbarMiddleware(object):
             for panel in self.debug_toolbars[request].panels:
                 panel.process_response(request, response)
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-                response.content = replace_insensitive(smart_unicode(response.content), u'</body>', smart_unicode(self.debug_toolbars[request].render_toolbar() + u'</body>'))
+                response.content = replace_insensitive(
+                    smart_unicode(response.content), 
+                    self.tag,
+                    smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
+            if response.get('Content-Length', None):
+                response['Content-Length'] = len(response.content)
         del self.debug_toolbars[request]
         return response

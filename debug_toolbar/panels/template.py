@@ -36,7 +36,8 @@ class TemplateDebugPanel(DebugPanel):
     name = 'Template'
     has_content = True
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
         self.templates = []
         template_rendered.connect(self._store_template_info)
 
@@ -83,28 +84,32 @@ class TemplateDebugPanel(DebugPanel):
 
                 context_list = []
                 for context_layer in context_data.dicts:
-                    for key, value in context_layer.items():
-                        # Replace any request elements - they have a large
-                        # unicode representation and the request data is
-                        # already made available from the Request Vars panel.
-                        if isinstance(value, http.HttpRequest):
-                            context_layer[key] = '<<request>>' 
-                        # Replace the debugging sql_queries element. The SQL
-                        # data is already made available from the SQL panel.
-                        elif key == 'sql_queries' and isinstance(value, list):
-                            context_layer[key] = '<<sql_queries>>' 
-                        # Replace LANGUAGES, which is available in i18n context processor
-                        elif key == 'LANGUAGES' and isinstance(value, tuple):
-                            context_layer[key] = '<<languages>>'
+                    if hasattr(context_layer, 'items'):
+                        for key, value in context_layer.items():
+                            # Replace any request elements - they have a large
+                            # unicode representation and the request data is
+                            # already made available from the Request Vars panel.
+                            if isinstance(value, http.HttpRequest):
+                                context_layer[key] = '<<request>>'
+                            # Replace the debugging sql_queries element. The SQL
+                            # data is already made available from the SQL panel.
+                            elif key == 'sql_queries' and isinstance(value, list):
+                                context_layer[key] = '<<sql_queries>>'
+                            # Replace LANGUAGES, which is available in i18n context processor
+                            elif key == 'LANGUAGES' and isinstance(value, tuple):
+                                context_layer[key] = '<<languages>>'
                     try:
                         context_list.append(pformat(context_layer))
                     except UnicodeEncodeError:
                         pass
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
-        context = {
+
+        context = self.context.copy()
+        context.update({
             'templates': template_context,
             'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
             'context_processors': context_processors,
-        }
+        })
+
         return render_to_string('debug_toolbar/panels/templates.html', context)

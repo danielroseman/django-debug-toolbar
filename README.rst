@@ -18,6 +18,11 @@ Currently, the following panels have been written and are working:
 - List of signals, their args and receivers
 - Logging output via Python's built-in logging module
 
+There is also one Django management command currently:
+
+- `debugsqlshell`: Outputs the SQL that gets executed as you work in the Python
+  interactive shell.  (See example below)
+
 If you have ideas for other panels please let us know.
 
 Installation
@@ -39,6 +44,11 @@ Installation
    Note: The debug toolbar will only display itself if the mimetype of the
    response is either `text/html` or `application/xhtml+xml` and contains a
    closing `</body>` tag.
+
+   Note: Be aware of middleware ordering and other middleware that may
+   intercept requests and return responses.  Putting the debug toolbar
+   middleware *after* the Flatpage middleware, for example, means the
+   toolbar will not show up on flatpages.
 
 #. Make sure your IP is listed in the `INTERNAL_IPS` setting.  If you are
    working locally this will be:
@@ -112,6 +122,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
    * `STACKTRACE_ROOT`: A string representing a filepath that is removed from 
      the start of paths in stacktraces, for readability.
 
+   * `TAG`: If set, this will be the tag to which debug_toolbar will attach the 
+     debug toolbar. Defaults to 'body'.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
@@ -122,7 +135,53 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 	    'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
 	    'HIDE_DJANGO_SQL': False,
+	    'TAG': 'div',
 	}
+
+`debugsqlshell`
+===============
+The following is sample output from running the `debugsqlshell` management
+command.  Each ORM call that results in a database query will be beautifully
+output in the shell::
+
+    $ ./manage.py debugsqlshell
+    Python 2.6.1 (r261:67515, Jul  7 2009, 23:51:51) 
+    [GCC 4.2.1 (Apple Inc. build 5646)] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    (InteractiveConsole)
+    >>> from page.models import Page
+    >>> ### Lookup and use resulting in an extra query...
+    >>> p = Page.objects.get(pk=1)
+    SELECT "page_page"."id",
+           "page_page"."number",
+           "page_page"."template_id",
+           "page_page"."description"
+    FROM "page_page"
+    WHERE "page_page"."id" = 1
+    
+    >>> print p.template.name
+    SELECT "page_template"."id",
+           "page_template"."name",
+           "page_template"."description"
+    FROM "page_template"
+    WHERE "page_template"."id" = 1
+    
+    Home
+    >>> ### Using select_related to avoid 2nd database call...
+    >>> p = Page.objects.select_related('template').get(pk=1)
+    SELECT "page_page"."id",
+           "page_page"."number",
+           "page_page"."template_id",
+           "page_page"."description",
+           "page_template"."id",
+           "page_template"."name",
+           "page_template"."description"
+    FROM "page_page"
+    INNER JOIN "page_template" ON ("page_page"."template_id" = "page_template"."id")
+    WHERE "page_page"."id" = 1
+    
+    >>> print p.template.name
+    Home
 
 TODOs and BUGS
 ==============

@@ -1,21 +1,10 @@
 {% load i18n %}
 <script type="text/javascript" charset="utf-8">
-	// When jQuery is sourced, it's going to overwrite whatever might be in the
-	// '$' variable, so store a reference of it in a temporary variable...
-	var _$ = window.$;
-	if (typeof jQuery == 'undefined') {
-		var jquery_url = '{{ BASE_URL }}/__debug__/m/jquery.js';
-		document.write(unescape('%3Cscript src="' + jquery_url + '" type="text/javascript"%3E%3C/script%3E'));
-	}
+// <![CDATA[
+var DEBUG_TOOLBAR_MEDIA_URL = "{{ DEBUG_TOOLBAR_MEDIA_URL }}";
+// ]]>
 </script>
-<script type="text/javascript" src="{{ BASE_URL }}/__debug__/m/toolbar.min.js"></script>
-<script type="text/javascript" charset="utf-8">
-	// Now that jQuery is done loading, put the '$' variable back to what it was...
-	var $ = _$;
-</script>
-<style type="text/css">
-	@import url({{ BASE_URL }}/__debug__/m/toolbar.min.css);
-</style>
+<script type="text/javascript" src="{{ DEBUG_TOOLBAR_MEDIA_URL }}js/toolbar.min.js"></script>
 <div id="djDebug">
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
@@ -33,7 +22,7 @@
 					{% endif %}
 					{{ panel.nav_title }}
 					{% with panel.nav_subtitle as subtitle %}
-						{% if subtitle %}<br><small>{{ subtitle }}</small>{% endif %}
+						{% if subtitle %}<br /><small>{{ subtitle }}</small>{% endif %}
 					{% endwith %}
 					{% if panel.has_content %}
 						</a>
